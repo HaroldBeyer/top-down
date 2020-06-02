@@ -86,7 +86,6 @@ public class Player : Character
                     PrepareToShoot();
                 }
             }
-
             if (Input.GetButtonDown(keyNames[3]))
                 SwitchGun();
         }
