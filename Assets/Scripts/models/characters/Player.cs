@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : Character
@@ -10,7 +11,8 @@ public class Player : Character
     protected MachineGun machineGun;
     protected SilencedPistol silencedPistol;
     public int[] ammo = new int[3];
-    private int gunNumber = 0;
+    [HideInInspector]
+    public int gunNumber = 0;
     public Transform firePoint;
     [SerializeField]
     protected GameObject pistolBullet;
@@ -19,7 +21,7 @@ public class Player : Character
     [SerializeField]
     protected GameObject silencedBullet;
 
-    protected PlayerState state = new PlayerState();
+    protected PlayerState state;
 
 
 
@@ -27,6 +29,7 @@ public class Player : Character
 
     private void Start()
     {
+        state = new PlayerState(this, new List<Gun> { (Gun)pistol, (Gun)silencedPistol, (Gun)machineGun });
         rgdb = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         position = rgdb.position;
@@ -63,28 +66,15 @@ public class Player : Character
         }
 
         this.state.CheckTime();
-
-        if (this.state.state == PlayerStates.shooting && this.state.shootingCount == 0)
-        {
-            CancelInvoke("PrepareToShoot");
-        }
     }
 
     private void LateUpdate()
     {
-        if (this.state.state != PlayerStates.reloading)
+        if (this.state.state == PlayerStates.roaming)
         {
-            if (Input.GetButtonDown(keyNames[2]))
+            if (Input.GetButton(keyNames[2]))
             {
-                if (gunNumber == 2)
-                {
-                    this.state.SetState(PlayerStates.shooting);
-                    InvokeRepeating("PrepareToShoot", 0f, 0.1f);
-                }
-                else
-                {
-                    PrepareToShoot();
-                }
+                PrepareToShoot();
             }
             if (Input.GetButtonDown(keyNames[3]))
                 SwitchGun();
@@ -94,13 +84,12 @@ public class Player : Character
     protected void PrepareToShoot()
     {
         Tuple<PlayerStances, Gun> SelectedGun = SelectGun();
-        if (this.state.state == PlayerStates.roaming)
+        if (this.state.state == PlayerStates.roaming || this.state.state == PlayerStates.shooting)
         {
             if (SelectedGun.Item2.HasAmmo())
             {
                 ChangeStance(SelectedGun.Item1);
                 SelectedGun.Item2.Shoot(firePoint);
-                this.state.CheckShooting();
             }
             else
             {
@@ -108,7 +97,6 @@ public class Player : Character
                 ammo[gunNumber] = SelectedGun.Item2.Reload(ammo[gunNumber]);
                 this.state.SetState(PlayerStates.reloading);
             }
-
         }
     }
 
@@ -131,5 +119,11 @@ public class Player : Character
             gunNumber++;
         else
             gunNumber = 0;
+    }
+
+    public void CancelShooting()
+    {
+        print("Cancelled!");
+        CancelInvoke("PrepareToShoot");
     }
 }

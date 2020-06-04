@@ -9,6 +9,9 @@ public class Gun : MonoBehaviour, IGun
     //type of bullet
     protected GameObject bulletPrefab;
 
+    protected float nextFire;
+    protected float fireRate;
+
 
 
     public int Reload(int ammo)
@@ -28,10 +31,14 @@ public class Gun : MonoBehaviour, IGun
 
     public void Shoot(Transform firePoint)
     {
-        GameObject bullet = Instantiate(this.bulletPrefab, firePoint.position, firePoint.rotation);
-        Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
-        rb.AddForce(Utils.invertVector3(firePoint.up), ForceMode2D.Impulse);
-        current_cartridge--;
+        if (Time.time > nextFire)
+        {
+            nextFire = Time.time + fireRate;
+            GameObject bullet = Instantiate(this.bulletPrefab, firePoint.position, firePoint.rotation);
+            Rigidbody2D rb = bullet.GetComponent<Rigidbody2D>();
+            rb.AddForce(Utils.invertVector3(firePoint.up), ForceMode2D.Impulse);
+            current_cartridge--;
+        }
     }
 
     public bool HasAmmo()

@@ -6,6 +6,7 @@ public class MachineGun : Gun
         this.cartridge_size = 32;
         this.current_cartridge = 0;
         this.bulletPrefab = bulletPrefab;
+        this.fireRate = 0.1f;
     }
 }
 

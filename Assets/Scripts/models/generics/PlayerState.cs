@@ -1,3 +1,9 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public delegate void InActionHandler();
+
 public class PlayerState : IState
 {
     /**
@@ -6,16 +12,31 @@ public class PlayerState : IState
     public PlayerStates state { get; private set; }
     public int remainingTime { get; private set; }
     public int shootingCount { get; private set; }
+    private Player player;
+    public List<Gun> gunList;
+    public event InActionHandler InAction;
 
-    public PlayerState()
+    public PlayerState(Player player, List<Gun> gunList)
     {
+        this.player = player;
+        this.gunList = gunList;
         this.SetState(PlayerStates.roaming);
     }
 
     public void CheckTime()
     {
-        if (this.remainingTime == 0 && this.state != PlayerStates.roaming)
+        if (this.state == PlayerStates.reloading && this.remainingTime > 0)
         {
+            player.ChangeStance(PlayerStances.reloading);
+        }
+        if ((this.shootingCount <= 0 || !gunList[player.gunNumber].HasAmmo()) && this.state == PlayerStates.shooting)
+        {
+            player.CancelShooting();
+            SetState(PlayerStates.roaming);
+        }
+        else if (this.remainingTime <= 0 && this.state != PlayerStates.roaming)
+        {
+            player.ChangeStance(PlayerStances.standing);
             SetState(PlayerStates.roaming);
         }
         else
