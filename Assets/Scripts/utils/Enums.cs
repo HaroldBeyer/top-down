@@ -25,7 +25,7 @@ public enum BulletTypes
 
 public enum PlayerStates
 {
-    roaming, reloading, shooting, healing
+    roaming, reloading, healing
 }
 
 public enum EnemyStates

@@ -29,7 +29,7 @@ public class Player : Character
 
     private void Start()
     {
-        state = new PlayerState(this, new List<Gun> { (Gun)pistol, (Gun)silencedPistol, (Gun)machineGun });
+        state = new PlayerState(this);
         rgdb = GetComponent<Rigidbody2D>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         position = rgdb.position;
@@ -84,14 +84,16 @@ public class Player : Character
     protected void PrepareToShoot()
     {
         Tuple<PlayerStances, Gun> SelectedGun = SelectGun();
-        if (this.state.state == PlayerStates.roaming || this.state.state == PlayerStates.shooting)
+        print(this.state.remainingTime);
+        print(this.state.state);
+        if (this.state.state == PlayerStates.roaming)
         {
             if (SelectedGun.Item2.HasAmmo())
             {
                 ChangeStance(SelectedGun.Item1);
                 SelectedGun.Item2.Shoot(firePoint);
             }
-            else
+            else if (ammo[gunNumber] > 0)
             {
                 ChangeStance(PlayerStances.reloading);
                 ammo[gunNumber] = SelectedGun.Item2.Reload(ammo[gunNumber]);

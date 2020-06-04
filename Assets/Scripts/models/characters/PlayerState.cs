@@ -11,15 +11,12 @@ public class PlayerState : IState
     */
     public PlayerStates state { get; private set; }
     public int remainingTime { get; private set; }
-    public int shootingCount { get; private set; }
     private Player player;
-    public List<Gun> gunList;
     public event InActionHandler InAction;
 
-    public PlayerState(Player player, List<Gun> gunList)
+    public PlayerState(Player player)
     {
         this.player = player;
-        this.gunList = gunList;
         this.SetState(PlayerStates.roaming);
     }
 
@@ -29,24 +26,15 @@ public class PlayerState : IState
         {
             player.ChangeStance(PlayerStances.reloading);
         }
-        if ((this.shootingCount <= 0 || !gunList[player.gunNumber].HasAmmo()) && this.state == PlayerStates.shooting)
-        {
-            player.CancelShooting();
-            SetState(PlayerStates.roaming);
-        }
         else if (this.remainingTime <= 0 && this.state != PlayerStates.roaming)
         {
             player.ChangeStance(PlayerStances.standing);
             SetState(PlayerStates.roaming);
         }
-        else
-        {
+
+        if (this.remainingTime > 0)
             this.remainingTime--;
-        }
-    }
-    public void CheckShooting()
-    {
-        shootingCount--;
+
     }
 
     public void SetState()
@@ -69,9 +57,6 @@ public class PlayerState : IState
                 break;
             case PlayerStates.reloading:
                 this.remainingTime = 150;
-                break;
-            case PlayerStates.shooting:
-                this.shootingCount = 8;
                 break;
         }
     }
