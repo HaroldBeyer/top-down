@@ -39,6 +39,8 @@ public class Stance
             case PlayerStances.reloading:
                 currentSprite = reloadingSprite;
                 break;
+            default:
+                throw new System.Exception();
         }
     }
 
@@ -46,9 +48,7 @@ public class Stance
     {
 
         if (sprite == standingSprite)
-        {
             return true;
-        }
         return false;
     }
 }

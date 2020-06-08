@@ -15,19 +15,6 @@ public class Bullet : MonoBehaviour
     void OnCollisionEnter2D(Collision2D collision)
     {
         print("Encostou!");
-        // GameObject effect;
-        // switch (collision.gameObject.tag)
-        // {
-        //     case "Enemy":
-        //         effect = Instantiate(bloodEffect, transform.position, Quaternion.identity);
-        //         Destroy(effect, 0.3f);
-        //         break;
-        //     default:
-        //         effect = Instantiate(hitEffect, transform.position, Quaternion.identity);
-        //         Destroy(effect, 1f);
-        //         break;
-        // }
-
         Destroy(gameObject);
     }
 }

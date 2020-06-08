@@ -10,7 +10,8 @@ public enum EnemyStances
 
 public enum Tags
 {
-    Bullet, Enemy, Player, Object, Respawn, Finish, EditorOnly, MainCamera, GameController
+    PistolBullet, MachineGunBullet, SilencedBullet, Enemy, Player, Object, Respawn, Finish, EditorOnly, MainCamera, GameController, Cure, PistolAmmo, SilencedPistolAmmo, MachineGunAmmo
+
 }
 
 public enum GunNames
@@ -33,8 +34,7 @@ public enum EnemyStates
     roaming, attacking
 }
 
-public enum ObjectStates
+public enum ObjectStances
 {
-    normal, damaged
+    normal, damaged, destroyed
 }
-

@@ -43,7 +43,7 @@ public class Player : Character
         machineGun = new MachineGun(machineGunBullet);
         pistol = new Pistol(pistolBullet);
         silencedPistol = new SilencedPistol(silencedBullet);
-        ammo = new int[3] { 500, 400, 303 };
+        ammo = new int[3] { 0, 0, 0 };
     }
 
     private void FixedUpdate()
@@ -84,8 +84,6 @@ public class Player : Character
     protected void PrepareToShoot()
     {
         Tuple<PlayerStances, Gun> SelectedGun = SelectGun();
-        print(this.state.remainingTime);
-        print(this.state.state);
         if (this.state.state == PlayerStates.roaming)
         {
             if (SelectedGun.Item2.HasAmmo())
@@ -125,7 +123,31 @@ public class Player : Character
 
     public void CancelShooting()
     {
-        print("Cancelled!");
         CancelInvoke("PrepareToShoot");
+    }
+
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        switch (other.gameObject.tag)
+        {
+            case "Enemy":
+                break;
+            case "PistolAmmo":
+                this.ammo[0] = +12;
+                print("Pistol ammo: " + this.ammo[0]);
+                break;
+            case "SilencedPistolAmmo":
+                this.ammo[1] = +8;
+                print("Silenced Pistol: " + this.ammo[1]);
+                break;
+            case "MachineGunAmmo":
+                this.ammo[2] = +32;
+                print("Machine Gun ammo: " + this.ammo[2]);
+                break;
+            case "HealthBox":
+                this.life = +10;
+                print("Life: " + life);
+                break;
+        }
     }
 }

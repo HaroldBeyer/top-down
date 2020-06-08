@@ -24,16 +24,6 @@ public class Character : MonoBehaviour, ICharacter
         isAlive = false;
     }
 
-    private void OnCollisionEnter2D(Collision2D other)
-    {
-        var tag = other.gameObject.tag;
-        if (tag == Tags.Enemy.ToString())
-        {
-
-        }
-        // if(tag )
-    }
-
     public void GetHit(int damage)
     {
         if (life > damage)

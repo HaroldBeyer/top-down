@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 3399859802985049923}
   m_Layer: 0
   m_Name: SilencedPistolBullet
-  m_TagString: Untagged
+  m_TagString: SilencedPistolBullet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
