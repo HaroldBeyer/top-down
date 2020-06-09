@@ -42,7 +42,6 @@ public class Object : MonoBehaviour, IObject
 
     public void OnHit(int damage)
     {
-        print("On hit! " + damage);
         if (damage >= health)
         {
             this.health = 0;

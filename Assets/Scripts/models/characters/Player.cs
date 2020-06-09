@@ -36,10 +36,10 @@ public class Player : Character
         ChangeStance(PlayerStances.standing);
         rgdb.freezeRotation = true;
         rotation = rgdb.rotation;
-        keyNames[0] = playerNumber == 0 ? "Horizontal" : "Horizontal" + playerNumber.ToString();
-        keyNames[1] = playerNumber == 0 ? "Vertical" : "Vertical" + playerNumber.ToString();
-        keyNames[2] = playerNumber == 0 ? "Fire" : "Fire" + playerNumber.ToString();
-        keyNames[3] = playerNumber == 0 ? "Switch" : "Switch" + playerNumber.ToString();
+        keyNames[0] = playerNumber == 0 ? "Horizontal" : "Horizontal" + playerNumber;
+        keyNames[1] = playerNumber == 0 ? "Vertical" : "Vertical" + playerNumber;
+        keyNames[2] = playerNumber == 0 ? "Fire" : "Fire" + playerNumber;
+        keyNames[3] = playerNumber == 0 ? "Switch" : "Switch" + playerNumber;
         machineGun = new MachineGun(machineGunBullet);
         pistol = new Pistol(pistolBullet);
         silencedPistol = new SilencedPistol(silencedBullet);
