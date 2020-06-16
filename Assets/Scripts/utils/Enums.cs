@@ -29,6 +29,7 @@ public enum PlayerStates
     roaming, reloading, healing
 }
 
+
 public enum EnemyStates
 {
     roaming, attacking

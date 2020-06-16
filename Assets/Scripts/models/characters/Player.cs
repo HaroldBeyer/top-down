@@ -20,7 +20,6 @@ public class Player : Character
     protected GameObject machineGunBullet;
     [SerializeField]
     protected GameObject silencedBullet;
-
     protected PlayerState state;
 
 
@@ -44,6 +43,7 @@ public class Player : Character
         pistol = new Pistol(pistolBullet);
         silencedPistol = new SilencedPistol(silencedBullet);
         ammo = new int[3] { 0, 0, 0 };
+        healthBar.SetActive(false);
     }
 
     private void FixedUpdate()
@@ -65,7 +65,7 @@ public class Player : Character
             Rotate(movement.x);
         }
 
-        this.state.CheckTime();
+        HandleStates();
     }
 
     private void LateUpdate()
@@ -131,6 +131,7 @@ public class Player : Character
         switch (other.gameObject.tag)
         {
             case "Enemy":
+                GetHit(10f);
                 break;
             case "PistolAmmo":
                 this.ammo[0] = +12;
@@ -149,5 +150,13 @@ public class Player : Character
                 print("Life: " + life);
                 break;
         }
+    }
+
+    private void HandleStates()
+    {
+        this.state.CheckTime();
+        this.healthState.CheckTime();
+        if (!healthState.state && this.healthBar.activeSelf)
+            this.healthBar.SetActive(false);
     }
 }

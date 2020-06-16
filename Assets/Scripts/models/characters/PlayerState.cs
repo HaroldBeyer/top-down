@@ -4,7 +4,7 @@ using UnityEngine;
 
 public delegate void InActionHandler();
 
-public class PlayerState : IState
+public class PlayerState : IState<PlayerStates>
 {
     /**
     Actual state
@@ -35,11 +35,6 @@ public class PlayerState : IState
         if (this.remainingTime > 0)
             this.remainingTime--;
 
-    }
-
-    public void SetState()
-    {
-        throw new System.NotImplementedException();
     }
 
     public void SetState(PlayerStates state)

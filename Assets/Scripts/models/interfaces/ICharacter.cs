@@ -10,7 +10,7 @@ public interface ICharacter
     float GetRotation();
     void Die();
     void MeleeAttack();
-    void GetHit(int damage);
+    void GetHit(float damage);
     void RecoverLife(int recovered);
     void Rotate(float rotationValue);
     bool isDead();

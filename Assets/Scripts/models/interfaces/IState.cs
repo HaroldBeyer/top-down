@@ -1,6 +1,8 @@
-public interface IState
+public interface IState<T>
 {
-    void SetState();
+    void SetState(T t);
+
+    void CheckTime();
 
 
 }

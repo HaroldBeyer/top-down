@@ -6,7 +6,7 @@ using System.Threading;
 
 public class Character : MonoBehaviour, ICharacter
 {
-    public int life;
+    public float life;
     public Rigidbody2D rgdb;
     protected bool isAlive;
     protected int nonStandingTime { get; private set; }
@@ -15,6 +15,9 @@ public class Character : MonoBehaviour, ICharacter
     protected SpriteRenderer spriteRenderer;
     protected float rotation;
     protected Vector2 position;
+    [SerializeField]
+    protected GameObject healthBar;
+    protected HealthState healthState = new HealthState();
 
 
 
@@ -22,13 +25,15 @@ public class Character : MonoBehaviour, ICharacter
     {
         life = 0;
         isAlive = false;
+        print("You are dead");
     }
 
-    public void GetHit(int damage)
+    public void GetHit(float damage)
     {
         if (life > damage)
         {
-            life = -damage;
+            life -= damage;
+            HandleHealth();
         }
         else
         {
@@ -85,5 +90,12 @@ public class Character : MonoBehaviour, ICharacter
         stance.changeStance(newStance);
         spriteRenderer.sprite = stance.currentSprite;
         nonStandingTime = 0;
+    }
+
+    private void HandleHealth()
+    {
+        healthBar.transform.localScale = new Vector3(healthBar.transform.localScale.x, life / 100, healthBar.transform.localScale.y);
+        healthState.SetState(true);
+        healthBar.SetActive(true);
     }
 }
