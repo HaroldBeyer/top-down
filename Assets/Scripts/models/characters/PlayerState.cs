@@ -55,15 +55,4 @@ public class PlayerState : IState<PlayerStates>
                 break;
         }
     }
-
-    private void OnCollisionEnter2D(Collision2D other)
-    {
-        switch (other.gameObject.tag)
-        {
-            case "Player":
-
-                break;
-        }
-        // other.gameObject.tag;
-    }
 }

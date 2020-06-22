@@ -32,7 +32,7 @@ public enum PlayerStates
 
 public enum EnemyStates
 {
-    roaming, attacking
+    roaming, attacking, searching
 }
 
 public enum ObjectStances
