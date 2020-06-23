@@ -29,6 +29,8 @@ public class Enemy : Character
     [SerializeField]
     private int minDist;
     public EnemyState state;
+    [SerializeField]
+    private float MoveSpeed;
 
     private void Start()
     {
@@ -36,7 +38,7 @@ public class Enemy : Character
         SearchForNewSelectedPlayer();
         state = new EnemyState(playersNumber);
         rgdb.freezeRotation = true;
-
+        MoveSpeed = 1f;
     }
 
     private void Update()
@@ -79,23 +81,13 @@ public class Enemy : Character
         //     RandomMovement(position);
         // }
     }
-
     private void Chase()
     {
-        //rotação mudando -2f
-        Vector2 direction = selectedPlayer.position - transform.position;
-        if (direction.x < 0)
-            direction.x = direction.x + direction.x;
-        if (direction.y < 0)
-            direction.y = direction.y + direction.y;
+        Vector3 direction = selectedPlayer.position - transform.position;
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
-        if (angle < 0)
-            angle = angle + angle;
-        // angle = Utils.limitRotation(angle);
         rgdb.rotation = angle;
         direction.Normalize();
-        Move(direction);
-        print("Direction: " + direction);
+        MoveEnemy(direction);
     }
 
     private void RandomMovement(Vector2 position)
@@ -143,6 +135,11 @@ public class Enemy : Character
         {
             playerList.Add(new SerializableTransform(obj.transform, playerPos));
         }
+    }
+
+    private void MoveEnemy(Vector3 direction)
+    {
+        rgdb.MovePosition(transform.position + (direction * 1f * Time.deltaTime));
     }
 }
 

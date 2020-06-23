@@ -11,6 +11,13 @@ public class Utils
         vector.z = -vector.z;
         return vector;
     }
+
+    public static Vector2 invertVector2(Vector2 vector)
+    {
+        vector.x = -vector.x;
+        vector.y = -vector.y;
+        return vector;
+    }
     public static float limitRotation(float rotation)
     {
         if (rotation > 360 || rotation < -360)
