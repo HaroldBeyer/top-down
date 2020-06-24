@@ -1,14 +1,16 @@
+using UnityEngine;
+
 public class EnemyState : IState<EnemyStates>
 {
     public EnemyStates states { get; private set; }
 
-    private int roamingTime = 1200;
+    private int roamingTime;
 
     private int searchedPlayers;
 
     private int searchedPlayersAux;
 
-    // EnemyS
+    public Vector2Aux position { get; private set; }
 
     public void CheckTime()
     {
@@ -30,12 +32,17 @@ public class EnemyState : IState<EnemyStates>
     {
         this.states = t;
         if (t == EnemyStates.roaming)
+        {
             setRemaining();
+            float x = Random.Range(-20, 20);
+            float y = Random.Range(-20, 20);
+            position = new Vector2Aux(x, y);
+        }
     }
 
     private void setRemaining()
     {
-        this.roamingTime = 100;
+        this.roamingTime = 3600;
     }
 
     public EnemyState(int searchedPlayers)

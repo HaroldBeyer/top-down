@@ -51,12 +51,22 @@ public class Enemy : Character
         //
         Vector2 position = transform.position;
         Vector2 playerPos = selectedPlayer.position;
-        Chase();
+        state.CheckTime();
+        if (state.states == EnemyStates.roaming)
+        {
+            RandomMovement();
+        }
+        else
+        {
+            print("Changed!");
+
+        }
+
         // if (state.states == EnemyStates.attacking)
         // {
         //     if (checkForDistance(position, playerPos))
         //     {
-        //         Chase(playerPos);
+        //         Chase();
         //     }
         //     else
         //     {
@@ -80,6 +90,9 @@ public class Enemy : Character
 
         //     RandomMovement(position);
         // }
+
+        //ficar tipo 10 segundos indo pra uma posição, depois trocar;
+        //ou seja, assim que mudar pra searching fazer uma nova
     }
     private void Chase()
     {
@@ -90,12 +103,14 @@ public class Enemy : Character
         MoveEnemy(direction);
     }
 
-    private void RandomMovement(Vector2 position)
+    private void RandomMovement()
     {
-        var x = Random.Range(-10, 10);
-        var y = Random.Range(-10, 10);
-        var movePostion = new Vector2(x, y);
-        Move(movePostion);
+        Vector2 direction = transform.position;
+        direction += state.position.convertToVector2();
+        float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+        rgdb.rotation = angle;
+        direction.Normalize();
+        MoveEnemy(direction);
     }
 
     private bool checkForDistance(Vector2 position, Vector2 playerPos)
