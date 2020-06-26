@@ -9,8 +9,8 @@ public class EnemyState : IState<EnemyStates>
     private int searchedPlayers;
 
     private int searchedPlayersAux;
+    public Vector2 position { get; private set; }
 
-    public Vector2Aux position { get; private set; }
 
     public void CheckTime()
     {
@@ -34,15 +34,29 @@ public class EnemyState : IState<EnemyStates>
         if (t == EnemyStates.roaming)
         {
             setRemaining();
-            float x = Random.Range(-20, 20);
-            float y = Random.Range(-20, 20);
-            position = new Vector2Aux(x, y);
+            setPosition();
         }
+        else if (t == EnemyStates.searching)
+        {
+            setSearchingPlayers();
+        }
+    }
+
+    private void setSearchingPlayers()
+    {
+        this.searchedPlayers = this.searchedPlayersAux;
+    }
+
+    private void setPosition()
+    {
+        float x = Random.Range(-20, 20);
+        float y = Random.Range(-20, 20);
+        position = new Vector2(x, y);
     }
 
     private void setRemaining()
     {
-        this.roamingTime = 3600;
+        this.roamingTime = 400;
     }
 
     public EnemyState(int searchedPlayers)

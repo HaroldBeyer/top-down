@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 [System.Serializable]
 public class SerializableTransform
@@ -12,29 +13,32 @@ public class SerializableTransform
     {
         this.position = t;
         this.saveableItemID = saveableItemID;
+
     }
 }
 
 public class Enemy : Character
 {
     [SerializeField]
-    private List<SerializableTransform> playerList;
+    private List<SerializableTransform> playerList = new List<SerializableTransform>();
     private Transform selectedPlayer;
     private int playerPos = 0;
-    [UnityEngine.SerializeField]
     private int playersNumber;
     //enemy vision range
     [SerializeField]
-    private int maxDist;
+    private float maxDist;
     [SerializeField]
-    private int minDist;
+    private float minDist;
     public EnemyState state;
     [SerializeField]
     private float MoveSpeed;
 
+    private int coutn = 800;
+
     private void Start()
     {
-        SetPlayerList();
+        playersNumber = playerList.Count - 1;
+        print("Players number" + playersNumber);
         SearchForNewSelectedPlayer();
         state = new EnemyState(playersNumber);
         rgdb.freezeRotation = true;
@@ -51,48 +55,63 @@ public class Enemy : Character
         //
         Vector2 position = transform.position;
         Vector2 playerPos = selectedPlayer.position;
-        state.CheckTime();
-        if (state.states == EnemyStates.roaming)
+        if (coutn > 200)
+        {
+            Chase();
+            coutn--;
+        }
+        else if (coutn > 0)
         {
             RandomMovement();
+            coutn--;
         }
         else
         {
-            print("Changed!");
-
+            SelectNewPlayer();
+            coutn = 800;
         }
+        /*
+        if (state.states == EnemyStates.attacking)
+        {
+            print("Attacking");
+            if (checkForDistance(position, playerPos))
+            {
+                print("Distance attack!");
+                Chase();
+            }
+            else
+            {
+                state.SetState(EnemyStates.searching);
+            }
+        }
+        else
+        {
+            if (state.states == EnemyStates.searching)
+            {
+                print("Searching");
+                SelectNewPlayer();
+                if (checkForDistance(position, playerPos))
+                {
+                    print("CHANGING TO ATTACK");
+                    state.SetState(EnemyStates.attacking);
+                }
+            }
+            else
+            {
+                print("Roaming forever");
+            }
 
-        // if (state.states == EnemyStates.attacking)
-        // {
-        //     if (checkForDistance(position, playerPos))
-        //     {
-        //         Chase();
-        //     }
-        //     else
-        //     {
-        //         state.SetState(EnemyStates.searching);
-        //     }
-        // }
-        // else
-        // {
-        //     print("Searching or roaming");
-        //     if (state.states == EnemyStates.searching)
-        //     {
-        //         SearchForNewSelectedPlayer();
+            state.CheckTime();
 
-        //         if (checkForDistance(position, playerPos))
-        //         {
-        //             state.SetState(EnemyStates.attacking);
-        //         }
-        //     }
+            RandomMovement();
+        }
+*/
+    }
 
-        //     state.CheckTime();
-
-        //     RandomMovement(position);
-        // }
-
-        //ficar tipo 10 segundos indo pra uma posição, depois trocar;
-        //ou seja, assim que mudar pra searching fazer uma nova
+    private void SelectNewPlayer()
+    {
+        NextPlayerPos();
+        SearchForNewSelectedPlayer();
     }
     private void Chase()
     {
@@ -106,7 +125,7 @@ public class Enemy : Character
     private void RandomMovement()
     {
         Vector2 direction = transform.position;
-        direction += state.position.convertToVector2();
+        direction += state.position;
         float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
         rgdb.rotation = angle;
         direction.Normalize();
@@ -123,11 +142,15 @@ public class Enemy : Character
 
     private void SearchForNewSelectedPlayer()
     {
+        print("OLD PLAYER: " + selectedPlayer);
         selectedPlayer = playerList[playerPos].position;
+        print("NEW PLAYER: " + selectedPlayer);
     }
 
     private void NextPlayerPos()
     {
+        print("Players number" + playersNumber);
+        print("Player pos: " + playerPos);
         if (playerPos >= playersNumber)
         {
             playerPos = 0;
@@ -157,11 +180,3 @@ public class Enemy : Character
         rgdb.MovePosition(transform.position + (direction * 1f * Time.deltaTime));
     }
 }
-
-/*
- var Player : Transform;
- var MoveSpeed = 4;
- var MaxDist = 10;
- var MinDist = 5;
- 
-*/
